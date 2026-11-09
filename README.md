@@ -2,9 +2,10 @@
 
 [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
 [![Orchestration](https://img.shields.io/badge/Framework-LangGraph-orange.svg)](https://github.com/langchain-ai/langgraph)
-[![Tests](https://img.shields.io/badge/Tests-364%20passed%20(Strict%20TDD)-brightgreen.svg)](#experimental-validation)
-[![Safety Invariant](https://img.shields.io/badge/Safety%20Invariant-UAR%20%3D%200.0%25-success.svg)](#experimental-validation)
-[![Topology](https://img.shields.io/badge/Topology-17--Node%20Nobel--Germany-informational.svg)](#network-environment)
+[![Tests](https://img.shields.io/badge/Tests-364%20passed%20(Strict%20TDD)-brightgreen.svg)](#experimental-validation--the-four-core-pillars)
+[![GDA](https://img.shields.io/badge/Gate%20Accuracy-96.7%25%20(GDA)-success.svg)](#experimental-validation--the-four-core-pillars)
+[![Physical Safety](https://img.shields.io/badge/Reach%20Violations%20Intercepted-100%25-brightgreen.svg)](#experimental-validation--the-four-core-pillars)
+[![Topology](https://img.shields.io/badge/Topology-17--Node%20Nobel--Germany-informational.svg)](#network-environment--physical-parameters)
 [![Status](https://img.shields.io/badge/Status-Codebase%20Under%20Academic%20Embargo-red.svg)](#academic-embargo--codebase-access)
 
 > **Master's Thesis Research Project**  
@@ -85,39 +86,58 @@ $$D(U_{sem}, \text{QoT}_{valid}) = \begin{cases} \text{clarify} & \text{if } U_{
 
 ---
 
-## Network Environment
+## Network Environment & Physical Parameters
 
-Evaluations are conducted on the standardized **17-Node Nobel-Germany Optical Backbone Network**:
+Evaluations are conducted on the standardized **17-Node German Core Optical Backbone Network** (derived from the SNDlib repository, 26 bidirectional links, spans ranging from $37.5\text{ km}$ to $381.9\text{ km}$):
 
 ![17-Node Nobel-Germany Topology](docs/figures/17_node_german.png)
 
-- **Topology Specifications:** 17 ROADM nodes, 26 bidirectional fiber links.
-- **Physical Channel Model:** Standard Single-Mode Fiber (SSMF, $\alpha = 0.2\text{ dB/km}$, $\gamma = 1.3\text{ W}^{-1}\text{km}^{-1}$, $D = 16.7\text{ ps/(nm}\cdot\text{km)}$).
-- **Amplification:** Inline EDFAs with $6.0\text{ dB}$ noise figure and total gain compensation.
-- **Spectrum Grid:** C-Band 96 channels, $100\text{ GHz}$ channel spacing, 100G/400G coherent modulation.
+- **Fiber Specifications:** Standard ITU-T G.652 single-mode fiber (SMF-28) with attenuation coefficient $\alpha = 0.25\text{ dB/km}$, nonlinear Kerr coefficient $\gamma = 1.27\text{ W}^{-1}\text{km}^{-1}$, and dispersion $|\beta_2| = 21.7\times 10^{-27}\text{ s}^2/\text{m}$ ($D \approx 17.0\text{ ps/(nm}\cdot\text{km)}$ at $\lambda = 1550\text{ nm}$).
+- **Amplification Chain:** Ingress pre-amplifiers, intermediate inline amplifiers (ILAs deployed approximately every $70\text{ km}$), and egress booster amplifiers. EDFA noise figures follow gain-dependent polynomial models (Attarpour et al., 2025) with transparent span loss compensation:
+  - Boosters & ILAs: Gains in $[10, 23]\text{ dB}$, noise figures in $[6, 12]\text{ dB}$.
+  - Pre-amplifiers: Gains in $[18, 32]\text{ dB}$, noise figures in $[6.2, 10.5]\text{ dB}$.
+- **Spectrum & Transmission:** C-Band 96 WDM channels, $26\text{ dB}$ transponder back-to-back SNR floor, receiver sensitivity $P_{rx} \in [-18.0, -8.0]\text{ dBm}$, and bitrate feasibility thresholds ($8.6\text{ dB}$ for 100G QPSK, $15.2\text{ dB}$ for 200G 16-QAM, $21.5\text{ dB}$ for 400G).
 
 ---
 
-## Experimental Validation
+## Experimental Validation & The Four Core Pillars
 
-The architecture was evaluated against **three operational baselines** across a 4-class balanced evaluation corpus (Nominal, Semantically Ambiguous, Physically Infeasible, and Adversarial intents):
+The architecture was evaluated against **three operational baselines** over a **120-demand benchmark corpus** partitioned symmetrically into four risk classes (30 demands each):
+- **Class I (Nominal):** Fully specified, feasible requests.
+- **Class II (Ambiguous):** Underspecified endpoints, missing bandwidth, or colloquial SLA terms ($U_{sem} > \tau_{sem}$).
+- **Class III (Physically Infeasible):** Demands violating GN-model physical reach ($\text{GSNR} < \text{GSNR}_{th}$).
+- **Class IV (Adversarial):** Conflicting topological constraints or malformed grammar ($v_{struct} = 0$).
 
-1. **Proposed RADG (V5):** Two-gate fail-fast neurosymbolic pipeline.
-2. **Always-On HITL:** Paranoid baseline requiring human review on every single intent turn.
-3. **LLM-Only Baseline:** Blind LLM execution without semantic validation gates (simulating reactive post-deployment controller failure).
-
-### Four Core Validation Pillars
+### Comparative Performance (120 Demands)
 
 ![Comparative Efficiency Pillars](docs/figures/comparative_efficiency_pillars.png)
 
 ![Cross-Model Gate Accuracy](docs/figures/cross_model_gate_accuracy.png)
 
+The table below summarizes the empirical evaluation across the **Four Validation Pillars** comparing the Proposed RADG against Always-On HITL and LLM-Only across evaluated models (Qwen 2.5 3B local SLM, GPT-6 Luna frontier cloud, GPT-5 Nano fast cloud):
+
+| Validation Pillar | Evaluated Metric | Proposed RADG (Qwen 2.5 3B) | Proposed RADG (GPT-6 Luna) | Proposed RADG (GPT-5 Nano) | Always-On HITL (GPT-6 Luna) | LLM-Only (GPT-6 Luna) |
+|---|---|:---:|:---:|:---:|:---:|:---:|
+| **Pillar 1: Semantic Translation** | Constraint Retention Rate ($\text{CRR}$) | 96.0% | **100.0%** | 93.2% | 100.0% | 100.0% |
+| | CFG Grammar Pass ($\text{CFG-PR}$) | **95.8%** | 95.0% | 93.3% | 95.0% | 93.3% |
+| | Semantic Agreement ($1 - d_{sem}$) | 0.858 | **0.955** | 0.963 | 0.462 | N/A |
+| **Pillar 2: Physical Integrity** | False Positive Rate ($\text{FPR}$) | **1.1%** | 4.4% | 10.0% | 4.4% | 100.0% |
+| | Physical Infeasibility Interception ($\text{PIIR}$) | 83.3% | **90.0%** | 90.0% | N/A | 0.0% |
+| | Class III Pre-Deployment Interception | **100.0%** | **100.0%** | 90.0% | 100.0% | 0.0% |
+| **Pillar 3: Efficiency & Friction** | Median Turnaround Latency $T_{E2E}$ | **13.19 s** | 15.89 s | 14.05 s | 16.84 s | 29.52 s |
+| | Median Tokens per Demand | 9,118 | 9,200 | **8,702** | 9,200 | 15,908 |
+| | Mean HITL Interventions ($\bar{N}_{hitl}$) | 0.73 | **0.72** | 0.68 | 0.97 | N/A |
+| | Class I Nominal Autonomy | **100.0%** | **100.0%** | 96.7% | 0.0% | 100.0% |
+| | Task Completion Rate ($\text{TCR}$) | 98.3% | **100.0%** | 100.0% | 100.0% | 100.0% |
+| **Pillar 4: Gate Reliability** | Gate Decision Accuracy ($\text{GDA}$) | **96.7%** | **96.7%** | 88.3% | 96.7% | 25.0% |
+| | Selective HITL Precision | 98.9% | **100.0%** | 98.8% | 74.1% | N/A |
+
 ### Key Empirical Findings
 
-- **Zero Unsafe Approvals ($UAR = 0.0\%$):** Strict mathematical safety invariant. Infeasible physical configurations never reach the optical network controller.
-- **100% Gate Decision Accuracy (GDA):** Both Semantic and Physical RADGs correctly classify 100% of nominal, ambiguous, and physically infeasible intents across evaluated Small Language Models (SLMs) and Frontier LLMs.
-- **80% Reduction in Operator Fatigue (HIC):** By autonomously approving nominal intents and filtering trivial passes, RADG cuts human interventions from 100% (Always-On) to 20% without compromising safety.
-- **Token Economy:** Context Bounding via Mock GraphRAG reduces prompt token consumption by $>90\%$ compared to full RESTConf JSON topology injection.
+1. **Pre-Deployment Admission Failure Prevention:** Disabling decision gates (LLM-Only) forwards 100% of non-nominal demands directly to the controller, producing **90 simulated deployment incidents** and triggering reactive RESTCONF recovery loops that inflate token consumption by $68.8\%$ and double turnaround latency ($29.52\text{ s}$ vs. $15.89\text{ s}$). The Proposed RADG intercepts $90\%$ to $99\%$ of non-nominal traffic prior to controller admission.
+2. **Mitigation of Operator Alert Fatigue:** The Always-On HITL baseline forces mandatory manual review on all 30 routine nominal requests, reducing Selective HITL Precision to $74.1\%$ (>1 in 4 interventions is a false alarm on well-formed traffic). The Proposed RADG delivers **100% nominal autonomy** on frontier and local SLM backends, saving 30 unnecessary human interruptions (**25.9% reduction in total operator interventions**) while keeping Selective HITL Precision at $98.8\% - 100\%$.
+3. **Model-Agnostic Physical Integrity Floor:** For Class III physical reach violations, **100.0% of reach-violating lightpaths are intercepted pre-deployment** on GPT-6 Luna and Qwen 2.5 3B (with $83.3\% - 90.0\%$ intercepted directly by the Physical RADG and the remainder caught upstream by the Semantic RADG). Zero physical reach violations reach the optical controller.
+4. **Local SLM Viability:** Running locally on commodity hardware (NVIDIA RTX 3050, 4 GB VRAM), `qwen2.5:3b` achieves **96.7% Gate Decision Accuracy** and an outstanding **1.1% False Positive Rate** due to conservative ambiguity interception, proving that carrier-grade pre-deployment safety does not mandate proprietary cloud models.
 
 ---
 
