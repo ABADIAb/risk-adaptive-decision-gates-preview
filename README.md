@@ -1,4 +1,4 @@
-# MultiAgentON: LLM-Assisted Risk-Adaptive Neurosymbolic Intent Planning for Optical Networks
+# LLM-Assisted Risk-Adaptive Decision Gates for Intent Based Optical Networks: A Pre-Deployment Decision Mechanism with Joint Semantic and QoT Assessment
 
 [![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
 [![Orchestration](https://img.shields.io/badge/Framework-LangGraph-orange.svg)](https://github.com/langchain-ai/langgraph)
@@ -9,22 +9,22 @@
 [![Status](https://img.shields.io/badge/Status-Codebase%20Under%20Academic%20Embargo-red.svg)](#academic-embargo--codebase-access)
 
 > **Master's Thesis Research Project**  
-> *Politecnico di Milano — Software-Defined Optical Networks (SDON) Research Laboratory*  
-> **Topic:** A Pre-Deployment Decision Mechanism with Joint Semantic and Quality of Transmission (QoT) Assessment for Intent-Based Optical Networks (IBON).
+> *Politecnico di Milano — Dipartimento di Elettronica, Informazione e Bioingegneria (DEIB)*  
+> *Software-Defined Optical Networks (SDON) Research Laboratory*
 
 ---
 
 > [!IMPORTANT]
 > ## Academic Embargo & Codebase Access
 > 
-> This repository is the public project overview and architectural showcase for the Master's Thesis: **"LLM-Assisted Risk-Adaptive Neurosymbolic Intent Planning for Optical Networks: A Pre-Deployment Decision Mechanism with Joint Semantic and QoT Assessment"** developed at **Politecnico di Milano (DEIB)**.
+> This repository is the public project overview and architectural showcase for the Master's Thesis: **"LLM-Assisted Risk-Adaptive Decision Gates for Intent Based Optical Networks: A Pre-Deployment Decision Mechanism with Joint Semantic and QoT Assessment"** developed at **Politecnico di Milano (DEIB)**.
 > 
 > **The production implementation codebase is currently hosted in a private repository under academic embargo** pending journal publication and thesis defense confidentiality agreements.
 > 
 > ### Requesting Full Codebase & Replication Package Access
 > If you are an academic researcher, peer reviewer, or industry practitioner interested in inspecting the source code, replicating the benchmarks, or reviewing technical artifacts under NDA:
 > 
-> - **Author:** Felipe Abadía
+> - **Author:** Felipe Abadía Bermeo
 > - **Email:** [felipeabadia01@gmail.com](mailto:felipeabadia01@gmail.com)
 > - **Institution:** Politecnico di Milano — Dipartimento di Elettronica, Informazione e Bioingegneria (DEIB)
 > - **GitHub Profile:** [@ABADIAb](https://github.com/ABADIAb)
@@ -40,7 +40,7 @@ Translating high-level operator intents into physical optical network configurat
 2. **Context Window Saturation:** Injecting raw optical network state (massive RESTConf JSON payloads) causes severe attention degradation (*"lost-in-the-middle"*), inflating inference costs and token latency.
 3. **Suboptimal Human-in-the-Loop (HITL) Interventions:** Existing paradigms oscillate between *always-on HITL* (operator fatigue, operational bottlenecks) and *blind autonomous execution* (high risk of unfeasible physical deployments).
 
-**MultiAgentON** introduces a **pre-deployment, fail-fast neurosymbolic pipeline** governed by **Risk-Adaptive Decision Gates (RADGs)**. Enforcing the strict principle **"LLMs reason, deterministic tools calculate"**, the system evaluates semantic uncertainty ($U_{sem}$) and physical feasibility ($QoT_{valid}$) sequentially *before* any configuration touches the optical network controller.
+This project introduces a **pre-deployment, fail-fast neurosymbolic pipeline** governed by **Risk-Adaptive Decision Gates (RADGs)**. Enforcing the strict principle **"LLMs reason, deterministic tools calculate"**, the system evaluates semantic uncertainty ($U_{sem}$) and physical feasibility ($QoT_{valid}$) sequentially *before* any configuration touches the optical network controller.
 
 ---
 
@@ -157,8 +157,8 @@ If you reference this architecture or research methodology in your work, please 
 
 ```bibtex
 @mastersthesis{abadia2026riskadaptive,
-  author       = {Abadía, Felipe},
-  title        = {LLM-Assisted Risk-Adaptive Neurosymbolic Intent Planning for Optical Networks: A Pre-Deployment Decision Mechanism with Joint Semantic and QoT Assessment},
+  author       = {Abadía Bermeo, Felipe},
+  title        = {LLM-Assisted Risk-Adaptive Decision Gates for Intent Based Optical Networks: A Pre-Deployment Decision Mechanism with Joint Semantic and QoT Assessment},
   school       = {Politecnico di Milano},
   year         = {2026},
   address      = {Milan, Italy},
